@@ -42,9 +42,9 @@ class App extends Component {
       this.web3.eth.getAccounts((err, accounts) => {
         const defaultAccount = this.web3.eth.accounts[0]
         const transferAccountNum = this.web3.eth.accounts[0];
-
-        let users = ["Oliver", "Robbie"]
-        let ngos = ["AID-A", "AID-B", "AID-C", "AID-D", "AID-E", "AID-F", "AID-G", "AID-H"];
+        //17
+        let users = ["Robbie", "Ms. Mercier", "Mr. Cowan"]
+        let ngos = ["WaterAid", "Action Against Hunger", "Generosity", "Blood Water", "Splash", "People in Need", "Unicef", "Shelter for Life", "WFP", "Care", "Room to Read", "WWF", "Unesco", "Amnesty International"];
         
         // Append all available accounts
         for (let i = 0; i < users.length; i++) {
@@ -143,7 +143,6 @@ class App extends Component {
 
   // Transfer tokens to a user
   transfer(user, amount) {
-    console.log(user);
     if (amount > 0) {
       // Execute token transfer below
       this.state.token.transfer(user, amount, {
@@ -152,7 +151,7 @@ class App extends Component {
         err ? console.error(err) : console.log(res)
       })
     }
-    
+
   }
 
   // When a new account in selected in the available accounts drop down.
@@ -167,8 +166,6 @@ class App extends Component {
   }
 
   render() {
-    let users = ["Oliver", "Robbie"]
-    let ngos = ["AID-A", "AID-B", "AID-C", "AID-D", "AID-E", "AID-F", "AID-G", "AID-H"];
     let component
 
     component = <div className="Mainbody">
@@ -179,8 +176,8 @@ class App extends Component {
       </DropDownMenu>
 
       <h3>Balances</h3>
-      <p className="App-intro">{this.state.ethBalance / 1e18} ETH</p>
-      <p className="App-intro"> {this.state.tokenBalance} {this.state.tokenSymbol}</p>
+      <p className="App-intro">{this.state.ethBalance / 1e18} CAD</p>
+      <p className="App-intro"> {this.state.tokenBalance / 1e18} {this.state.tokenSymbol}</p>
       <br />
       <div>
         <h3>Buy Tokens</h3>
@@ -199,8 +196,8 @@ class App extends Component {
         <DropDownMenu maxHeight={300} width={500} value={this.state.transferAccountNum} onChange={this.handleDropDownChangeTransfer}>
           {this.state.ngoAccounts}
         </DropDownMenu>
-        <p className="App-intro">{this.state.ethBalanceTransfer / 1e18} ETH</p>
-        <p className="App-intro"> {this.state.tokenBalanceTransfer} {this.state.tokenSymbol}</p>
+        <p className="App-intro">{this.state.ethBalanceTransfer / 1e18} CAD</p>
+        <p className="App-intro"> {this.state.tokenBalanceTransfer / 1e18} {this.state.tokenSymbol}</p>
         
         <TextField floatingLabelText="Amount." style={{width: 100}} value={this.state.transferAmount}
           onChange={(e, transferAmount) => { this.setState({ transferAmount })}}

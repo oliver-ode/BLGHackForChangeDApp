@@ -8,7 +8,7 @@ contract Token {
   string public constant symbol = 'SAT';
   string public constant name = 'Security Aid Tokens';
   uint public constant decimals = 18;
-  uint public constant rate = 2;  // rate of token / wei for purchase
+  uint public constant rate = 1;  // rate of token / wei for purchase
   uint256 private totalSupply_;
   mapping (address => uint256) private balances_;
   mapping(address => mapping (address => uint256)) private allowed_;
