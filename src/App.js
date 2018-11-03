@@ -29,6 +29,8 @@ class App extends Component {
       transferUser: '',
       token: null, // token contract
       transferAccountNum: 0,
+      userAccounts: [],
+      ngoAccounts: [],
     }
   }
 
@@ -39,11 +41,23 @@ class App extends Component {
     if (this.web3.isConnected()) {
       this.web3.eth.getAccounts((err, accounts) => {
         const defaultAccount = this.web3.eth.accounts[0]
+        const transferAccountNum = this.web3.eth.accounts[0];
+
+        let users = ["Oliver", "Robbie"]
+        let ngos = ["AID-A", "AID-B", "AID-C", "AID-D", "AID-E", "AID-F", "AID-G", "AID-H"];
+        
         // Append all available accounts
-        for (let i = 0; i < accounts.length; i++) {
+        for (let i = 0; i < users.length; i++) {
           this.setState({
-            availableAccounts: this.state.availableAccounts.concat(
-              <MenuItem value={i} key={accounts[i]} primaryText={accounts[i]} />
+            userAccounts: this.state.userAccounts.concat(
+              <MenuItem value={i} key={accounts[i]} primaryText={users[i]} />
+            )
+          })
+        }
+        for (let i = 0; i < ngos.length; i++) {
+          this.setState({
+            ngoAccounts: this.state.ngoAccounts.concat(
+              <MenuItem value={i} key={accounts[i+users.length]} primaryText={ngos[i]} />
             )
           })
         }
@@ -68,6 +82,7 @@ class App extends Component {
 
             this.loadEventListeners()
             this.loadAccountBalances(defaultAccount)
+            this.loadAccountBalancesTransfer(transferAccountNum)
           }
         })
       })
@@ -128,6 +143,7 @@ class App extends Component {
 
   // Transfer tokens to a user
   transfer(user, amount) {
+    console.log(user);
     if (amount > 0) {
       // Execute token transfer below
       this.state.token.transfer(user, amount, {
@@ -136,31 +152,30 @@ class App extends Component {
         err ? console.error(err) : console.log(res)
       })
     }
+    
   }
 
   // When a new account in selected in the available accounts drop down.
   handleDropDownChange = (event, index, defaultAccount) => {
     this.setState({ defaultAccount })
-    this.loadAccountBalances(this.state.availableAccounts[index].key)
+    this.loadAccountBalances(this.state.userAccounts[index].key)
   }
 
   handleDropDownChangeTransfer = (event, index, transferAccountNum) => {
     this.setState({ transferAccountNum })
-    this.loadAccountBalancesTransfer(this.state.availableAccounts[index].key)
+    this.loadAccountBalancesTransfer(this.state.ngoAccounts[index].key)
   }
 
   render() {
-    let names = ["Oliver", "Robbie", "AID-A", "AID-B", "AID-C", "AID-D", "AID-E", "AID-F", "AID-G", "AID-H"];
+    let users = ["Oliver", "Robbie"]
+    let ngos = ["AID-A", "AID-B", "AID-C", "AID-D", "AID-E", "AID-F", "AID-G", "AID-H"];
     let component
 
     component = <div className="Mainbody">
-      <h3>Testing area</h3>
-      <p className="App-intro">{names[0]}</p>
-      <p className="App-intro">{this.state.availableAccounts[0]}</p>
 
       <h3>Active Account</h3>
       <DropDownMenu maxHeight={300} width={500} value={this.state.defaultAccount} onChange={this.handleDropDownChange}>
-        {this.state.availableAccounts}
+        {this.state.userAccounts}
       </DropDownMenu>
 
       <h3>Balances</h3>
@@ -182,20 +197,16 @@ class App extends Component {
         <h3>Transfer Tokens</h3>
 
         <DropDownMenu maxHeight={300} width={500} value={this.state.transferAccountNum} onChange={this.handleDropDownChangeTransfer}>
-          {this.state.availableAccounts}
+          {this.state.ngoAccounts}
         </DropDownMenu>
         <p className="App-intro">{this.state.ethBalanceTransfer / 1e18} ETH</p>
         <p className="App-intro"> {this.state.tokenBalanceTransfer} {this.state.tokenSymbol}</p>
         
-        <h1>Spacer</h1>
-        <TextField floatingLabelText="User to transfer tokens to." style={{width: 400}} value={this.state.transferUser}
-          onChange={(e, transferUser) => { this.setState({ transferUser }) }}
-        />
         <TextField floatingLabelText="Amount." style={{width: 100}} value={this.state.transferAmount}
           onChange={(e, transferAmount) => { this.setState({ transferAmount })}}
         />
         <RaisedButton label="Transfer" labelPosition="before" primary={true}
-          onClick={() => this.transfer(this.state.transferUser, this.state.transferAmount)}
+          onClick={() => this.transfer(this.state.ngoAccounts[this.state.transferAccountNum].key, this.state.transferAmount)}
         />
 
       </div>

@@ -5,8 +5,8 @@ pragma solidity ^0.4.24;
  * @author Adam Lemmon <adam@blockchainlearninggroup.com>
  */
 contract Token {
-  string public constant symbol = 'SAID';
-  string public constant name = 'SAID Tokens';
+  string public constant symbol = 'SAT';
+  string public constant name = 'Security Aid Tokens';
   uint public constant decimals = 18;
   uint public constant rate = 2;  // rate of token / wei for purchase
   uint256 private totalSupply_;
