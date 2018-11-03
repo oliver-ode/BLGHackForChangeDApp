@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './blg.jpg';
+import logo from './said.png';
 import './App.css';
 // Import the web3 library
 import Web3 from 'web3'
@@ -28,6 +28,7 @@ class App extends Component {
       transferAmount: '',
       transferUser: '',
       token: null, // token contract
+      transferAccountNum: 0,
     }
   }
 
@@ -91,6 +92,20 @@ class App extends Component {
     }
   }
 
+  loadAccountBalancesTransfer(account) {
+    if (this.state.token) {
+      // Set token balance below
+      this.state.token.balanceOf(account, (err, balance) => {
+        this.setState({ tokenBalanceTransfer: balance.toNumber() })
+      })
+
+      // Set ETH balance below
+      this.web3.eth.getBalance(account, (err, ethBalance) => {
+        this.setState({ ethBalanceTransfer: ethBalance })
+      })
+    }
+  }
+
   // Create listeners for all events.
   loadEventListeners() {
     // Watch tokens transfer event below
@@ -127,16 +142,27 @@ class App extends Component {
   handleDropDownChange = (event, index, defaultAccount) => {
     this.setState({ defaultAccount })
     this.loadAccountBalances(this.state.availableAccounts[index].key)
-    }
+  }
+
+  handleDropDownChangeTransfer = (event, index, transferAccountNum) => {
+    this.setState({ transferAccountNum })
+    this.loadAccountBalancesTransfer(this.state.availableAccounts[index].key)
+  }
 
   render() {
+    let names = ["Oliver", "Robbie", "AID-A", "AID-B", "AID-C", "AID-D", "AID-E", "AID-F", "AID-G", "AID-H"];
     let component
 
-    component = <div>
+    component = <div className="Mainbody">
+      <h3>Testing area</h3>
+      <p className="App-intro">{names[0]}</p>
+      <p className="App-intro">{this.state.availableAccounts[0]}</p>
+
       <h3>Active Account</h3>
       <DropDownMenu maxHeight={300} width={500} value={this.state.defaultAccount} onChange={this.handleDropDownChange}>
         {this.state.availableAccounts}
       </DropDownMenu>
+
       <h3>Balances</h3>
       <p className="App-intro">{this.state.ethBalance / 1e18} ETH</p>
       <p className="App-intro"> {this.state.tokenBalance} {this.state.tokenSymbol}</p>
@@ -154,6 +180,14 @@ class App extends Component {
       <br />
       <div>
         <h3>Transfer Tokens</h3>
+
+        <DropDownMenu maxHeight={300} width={500} value={this.state.transferAccountNum} onChange={this.handleDropDownChangeTransfer}>
+          {this.state.availableAccounts}
+        </DropDownMenu>
+        <p className="App-intro">{this.state.ethBalanceTransfer / 1e18} ETH</p>
+        <p className="App-intro"> {this.state.tokenBalanceTransfer} {this.state.tokenSymbol}</p>
+        
+        <h1>Spacer</h1>
         <TextField floatingLabelText="User to transfer tokens to." style={{width: 400}} value={this.state.transferUser}
           onChange={(e, transferUser) => { this.setState({ transferUser }) }}
         />
@@ -163,6 +197,7 @@ class App extends Component {
         <RaisedButton label="Transfer" labelPosition="before" primary={true}
           onClick={() => this.transfer(this.state.transferUser, this.state.transferAmount)}
         />
+
       </div>
     </div>
 
@@ -170,7 +205,7 @@ class App extends Component {
       <MuiThemeProvider>
         <div className="App">
           <header className="App-header">
-            <img src={logo} alt="logo" style={{height: '150px', width: '350px'}}/>
+            <img src={logo} alt="logo" style={{height: '279px', width: '350px'}}/>
           </header>
           {component}
         </div>

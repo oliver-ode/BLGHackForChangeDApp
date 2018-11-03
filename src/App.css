@@ -2,14 +2,28 @@
   text-align: center;
 }
 
+.Mainbody {
+  /*background-color: #63B5E5*/
+  background-color: #ffffff;
+  border-style: solid;
+  border-color: #7f8284;
+  /*border-top-width: 0px;*/
+  /*border-bottom-width: 0px;*/
+  /*box-shadow: 0px 0px 0px 10px black inset*/
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
+  background-color: #ffffff;
+  height: 240px;
   padding: 20px;
   color: white;
 }
